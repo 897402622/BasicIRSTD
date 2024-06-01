@@ -52,25 +52,24 @@ class TestSetLoader(Dataset):
     def __getitem__(self, idx):
         try:
             img = Image.open((self.dataset_dir + '/images/' + self.test_list[idx] + '.png').replace('//','/')).convert('I')
-            mask = Image.open((self.dataset_dir + '/masks/' + self.test_list[idx] + '.png').replace('//','/'))
+            
         except:
             img = Image.open((self.dataset_dir + '/images/' + self.test_list[idx] + '.bmp').replace('//','/')).convert('I')
-            mask = Image.open((self.dataset_dir + '/masks/' + self.test_list[idx] + '.bmp').replace('//','/'))
+            
 
         img = Normalized(np.array(img, dtype=np.float32), self.img_norm_cfg)
-        mask = np.array(mask, dtype=np.float32)  / 255.0
-        if len(mask.shape) > 2:
-            mask = mask[:,:,0]
+       
+        
         
         h, w = img.shape
         img = PadImg(img)
-        mask = PadImg(mask)
         
-        img, mask = img[np.newaxis,:], mask[np.newaxis,:]
+        
+        img = img[np.newaxis,:]
         
         img = torch.from_numpy(np.ascontiguousarray(img))
-        mask = torch.from_numpy(np.ascontiguousarray(mask))
-        return img, mask, [h,w], self.test_list[idx]
+        
+        return img,  [h,w], self.test_list[idx]
     def __len__(self):
         return len(self.test_list) 
 
