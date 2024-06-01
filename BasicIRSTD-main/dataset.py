@@ -81,7 +81,7 @@ class EvalSetLoader(Dataset):
         self.mask_pred_dir = mask_pred_dir
         self.test_dataset_name = test_dataset_name
         self.model_name = model_name
-        with open(self.dataset_dir+'/img_idx/test_' + test_dataset_name + '.txt', 'r') as f:
+        with open(self.dataset_dir+'/img_idx/test.txt', 'r') as f:
             self.test_list = f.read().splitlines()
 
     def __getitem__(self, idx):
