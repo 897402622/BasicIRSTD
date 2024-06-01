@@ -37,13 +37,12 @@ def test():
     
     eval_mIoU = mIoU() 
     eval_PD_FA = PD_FA()
-    for idx_iter, (img, gt_mask, size, img_dir) in enumerate(test_loader):
+    for idx_iter, (img,  size, img_dir) in enumerate(test_loader):
         img = Variable(img).cuda()
         pred = net.forward(img)
         pred = pred[:,:,:size[0],:size[1]]
-        gt_mask = gt_mask[:,:,:size[0],:size[1]]
-        eval_mIoU.update((pred>opt.threshold).cpu(), gt_mask)
-        eval_PD_FA.update((pred[0,0,:,:]>opt.threshold).cpu(), gt_mask[0,0,:,:], size)   
+        
+        
         
         ### save img
         if opt.save_img == True:
@@ -52,10 +51,7 @@ def test():
                 os.makedirs(opt.save_img_dir + opt.test_dataset_name + '/' + opt.model_name)
             img_save.save(opt.save_img_dir + opt.test_dataset_name + '/' + opt.model_name + '/' + img_dir[0] + '.png')  
     
-    results1 = eval_mIoU.get()
-    results2 = eval_PD_FA.get()
-    print("pixAcc, mIoU:\t" + str(results1))
-    print("PD, FA:\t" + str(results2))
+    
     opt.f.write("pixAcc, mIoU:\t" + str(results1) + '\n')
     opt.f.write("PD, FA:\t" + str(results2) + '\n')
 
